@@ -1,0 +1,64 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["hi", "hello", "hey", "good morning", "good evening"],
+      "responses": ["Hello! I'm EquiBot, how can I help Equify today?"]
+    },
+    {
+      "tag": "project_info",
+      "patterns": [
+        "what is project equify",
+        "tell me about equify",
+        "what is the project about",
+        "scope of the project",
+        "Who is the OP of the project"
+      ],
+      "responses": [
+        "Project Equify 5.0 is a cross-cultural social impact initiative aligned with SDG 10."
+      ]
+    },
+    {
+      "tag": "logistics",
+      "patterns": [
+        "where is the OP located",
+        "Is transportation provided by week",
+        "what time does the project start",
+        "what is the schedule",
+        "venue for the project"
+      ],
+      "responses": [
+        "Logistics vary by week, but sessions are usually in Selangor area. Please confirm with the OC for exact time and venue."
+      ]
+    },
+    {
+      "tag": "accommodation",
+      "patterns": [
+        "is accommodation provided",
+        "where will i stay",
+        "housing",
+        "do you provide hostel"
+      ],
+      "responses": [
+        "Accommodation is provided. It applies hosting style, where the global volunteer must stay with a local family. Usually local committee will brief you during IPS."
+      ]
+    },
+    {
+      "tag": "contact_team",
+      "patterns": [
+        "who do i contact",
+        "contact the oc",
+        "who is the project director",
+        "i need help"
+      ],
+      "responses": [
+        "You can contact the Project Director via email/WhatsApp shared in your onboarding email."
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["bye", "see you", "thanks", "thank you"],
+      "responses": ["Thanks for reaching out to AIESEC!"]
+    }
+  ]
+}
