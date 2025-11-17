@@ -12,35 +12,228 @@
         "tell me about equify",
         "what is the project about",
         "scope of the project",
-        "Who is the OP of the project"
+        "who is the op of the project",
+        "what is equify 5.0",
+        "why equify"
       ],
       "responses": [
-        "Project Equify 5.0 is a cross-cultural social impact initiative aligned with SDG 10."
+        "Project Equify 5.0 is a cross-cultural social impact initiative aligned with SDG 10, focusing on reducing inequalities and empowering underprivileged communities.",
+        "Equify 5.0 is an AIESEC project under incoming Global Volunteer that tackles inequalities through community service, workshops and youth engagement spaces."
       ]
     },
     {
-      "tag": "logistics",
+      "tag": "project_objectives",
       "patterns": [
-        "where is the OP located",
-        "Is transportation provided by week",
-        "what time does the project start",
-        "what is the schedule",
-        "venue for the project"
+        "what are the objectives of equify",
+        "project objectives",
+        "why upm equify",
+        "what is the goal of this project",
+        "what impact does this project want to make"
       ],
       "responses": [
-        "Logistics vary by week, but sessions are usually in Selangor area. Please confirm with the OC for exact time and venue."
+        "Equify aims to promote local initiatives that improve the quality of life among underprivileged communities and increase awareness of inequalities among youths and the public.",
+        "The project contributes to SDG 10 by tackling discrimination and inequality through local initiatives, educational spaces and awareness activities."
       ]
     },
     {
-      "tag": "accommodation",
+      "tag": "sdg_focus",
       "patterns": [
-        "is accommodation provided",
-        "where will i stay",
-        "housing",
-        "do you provide hostel"
+        "which sdg is equify aligned with",
+        "what sdg is this project about",
+        "sdg focus",
+        "what sustainable development goal",
+        "sdg goal for this project"
       ],
       "responses": [
-        "Accommodation is provided. It applies hosting style, where the global volunteer must stay with a local family. Usually local committee will brief you during IPS."
+        "Equify is aligned with SDG 10: Reduced Inequalities, especially in social, ethnic, gender, disability and economic aspects.",
+        "The project focuses on SDG 10.2, which is about promoting social, economic and political inclusion for all by 2030."
+      ]
+    },
+    {
+      "tag": "duration",
+      "patterns": [
+        "how long is the project",
+        "project duration",
+        "when does equify start",
+        "when does equify end",
+        "how many weeks is the project"
+      ],
+      "responses": [
+        "Equify runs for about 6 weeks, between late February and early-April 2026. Exact dates are shared in your opportunity details and matching documents.",
+        "The project is designed as a 6-week volunteering experience. Please refer to your official opportunity page or matching email for your confirmed dates."
+      ]
+    },
+    {
+      "tag": "opportunity_provider",
+      "patterns": [
+        "who is the opportunity provider",
+        "who is the partner organisation",
+        "what is ida",
+        "who are we working with",
+        "where is ida located"
+      ],
+      "responses": [
+        "The main opportunity provider is the Intellectually Disabled Association (IDA), an association that connects contributors, volunteers and beneficiaries to make charitable giving part of everyone’s life.",
+        "You will mainly work with the Intellectually Disabled Association (IDA), located in Puchong, Selangor, about 20 minutes from Kuala Lumpur."
+      ]
+    },
+    {
+      "tag": "key_activities",
+      "patterns": [
+        "what will i be doing",
+        "what are my responsibilities",
+        "what are the main activities",
+        "job description",
+        "what kind of work will i do"
+      ],
+      "responses": [
+        "Your role may include community service with underserved communities, contributing and handling workshops, planning agendas for visits to IDA, assisting participants during learning circles, joining AIESEC engagement spaces and creating social media content about SDG 10.",
+        "You will support community service, workshops, youth engagement talks, school education sessions, and help showcase inequalities and SDG 10 through projects and social media."
+      ]
+    },
+    {
+      "tag": "working_hours",
+      "patterns": [
+        "what are the working hours",
+        "what is the weekly commitment",
+        "how many hours do we work",
+        "do we work on weekends",
+        "is there a rest day"
+      ],
+      "responses": [
+        "Standard project working hours are usually from 9:00 AM to 5:00 PM, with occasional extensions after 5 PM when needed.",
+        "You are expected to commit around 25–30 hours per week, which is roughly 6 hours per day. Total work hours should not exceed 40 hours per week, and you are entitled to at least one rest day per week."
+      ]
+    },
+    {
+  "tag": "accommodation",
+  "patterns": [
+    "is accommodation provided",
+    "is accomodation provided",
+    "where will i stay",
+    "where do we stay",
+    "where do we sleep",
+    "how is the accommodation like",
+    "how is the accomodation like",
+    "i wanna know about accommodation",
+    "i wanna know about accomodation",
+    "tell me about the place we stay",
+    "do you provide hostel",
+    "will i stay with a host family",
+    "do we stay with host families",
+    "what about housing",
+    "accommodation details",
+    "accomodation details"
+  ],
+  "responses": [
+    "Accommodation is provided in a hosting style where you stay with different local hosts connected to IDA. Details are usually briefed during the Incoming Preparation Seminar (IPS).",
+    "Yes, accommodation is covered. You will stay with local host families or different host accommodations arranged for the project."
+  ]
+},
+{
+  "tag": "meals_transport",
+  "patterns": [
+    "are meals provided",
+    "is food included",
+    "is food covered",
+    "how about meals",
+    "do you provide transport",
+    "how about transportation",
+    "is transport included",
+    "is city tour covered",
+    "who pays for daily transport",
+    "who pays for transport",
+    "do i need to pay for grab",
+    "do i pay for public transport myself"
+  ],
+  "responses": [
+    "Meals are provided. You are also allowed to buy groceries and use the kitchen at your host’s house.",
+    "Transportation is provided for AIESEC-related project activities. City tours and personal outings are not fully covered, and you will need to bear some of your travel expenses."
+  ]
+},
+    {
+      "tag": "logistics_breakdown",
+      "patterns": [
+        "logistics breakdown",
+        "where is the project located",
+        "location of the project",
+        "which city will i be in",
+        "where will the project take place"
+      ],
+      "responses": [
+        "Equify takes place mainly in Intelectually Disabled Association,  Puchong, Selangor. Accommodation is provided with hosts. Transport is provided for AIESEC activities, while other travel like city tours is at your own expense.",
+        "The project location is Puchong, near Kuala Lumpur. You will stay with different hosts, and project-related transport is covered, but personal travel is mostly self-funded."
+      ]
+    },
+    {
+      "tag": "ep_requirements",
+      "patterns": [
+        "what are the requirements to join",
+        "who can apply",
+        "eligibility criteria",
+        "what kind of people are you looking for",
+        "do i need specific background"
+      ],
+      "responses": [
+        "We are looking for creative, innovative, solution-oriented volunteers who are kind, patient, open and resilient. You should be able to communicate in English, and understanding & communicating in Chinese is a plus.",
+        "There is no specific academic background required. Minimum a high school certificate is recommended, and we prefer volunteers who are willing to learn, open-minded and responsible."
+      ]
+    },
+    {
+      "tag": "benefits",
+      "patterns": [
+        "what do i gain from this project",
+        "benefits as a volunteer",
+        "why should i join equify",
+        "how will this project help me",
+        "what skills will i develop"
+      ],
+      "responses": [
+        "You will contribute to reducing inequalities in Malaysia, develop leadership qualities and improve soft skills like communication and facilitation.",
+        "You will be surrounded by like-minded individuals, work with people from different countries and build a global network while making a positive impact."
+      ]
+    },
+    {
+      "tag": "cost_breakdown",
+      "patterns": [
+        "how much does it cost",
+        "project fees",
+        "logistics fee",
+        "how much do i pay to aiesec",
+        "equify cost breakdown"
+      ],
+      "responses": [
+        "Expect to pay around RM 800 for project fee. Exact amounts may vary and will be confirmed by AIESEC in UPM.",
+        "Please check the latest opportunity details for updated fees."
+        
+      ]
+    },
+    {
+      "tag": "personal_fees",
+      "patterns": [
+        "how much personal money do i need",
+        "how much should i budget",
+        "personal expenses",
+        "how much for food and transport",
+        "total expenditure"
+      ],
+      "responses": [
+        "Personal expenses are estimated at around RM 2230, which includes flight tickets, food, local transport and an emergency reserve. This excludes project fee.",
+        "Total estimated expenditure, including initial cost and personal fees, is around RM 3030. This is only an estimate and can vary based on your spending and flight prices."
+      ]
+    },
+    {
+      "tag": "who_is_aiesec_upm",
+      "patterns": [
+        "what is aiesec in upm",
+        "tell me about aiesec upm",
+        "where is aupm located",
+        "how many members does aiesec upm have",
+        "what are the values of aiesec upm"
+      ],
+      "responses": [
+        "AIESEC in UPM (AUPM) was established in 1989 and is located in Serdang, Selangor. The entity has more than 60 members and focuses on enabling purposeful youth leadership.",
+        "AUPM upholds values such as ownership, growth mindset, openness and acceptance, and continuously empowers youth to create change through leadership development."
       ]
     },
     {
@@ -49,11 +242,18 @@
         "who do i contact",
         "contact the oc",
         "who is the project director",
-        "i need help"
+        "i need help",
+        "who can i talk to"
       ],
       "responses": [
-        "You can contact the Project Director via email/WhatsApp shared in your onboarding email."
+        "You can contact the Project Director, Rohan via Whatsapp at +60175522805 or OCIR, Irfan at +60 11-2953 9341",
+        "For Equify 5.0, you can reach the Director of Incoming Global Volunteer - Equify Project or the Vice President iGV of AIESEC in UPM using the contact details provided in the project booklet and official emails."
       ]
+    },
+    {
+      "tag": "more info",
+      "patterns": ["i want more info", "i still have questions", "where can i find more details", "additional information", "more about equify"],
+      "responses": ["If you have any more questions about Equify, the Project Director, Rohan via Whatsapp at +60175522805 or OCIR, Irfan at +60 11-2953 9341"]
     },
     {
       "tag": "goodbye",

@@ -33,16 +33,16 @@ vectorizer = layers.TextVectorization(
     output_mode="int",
     output_sequence_length=seq_len,
 )
-vectorizer.adapt(texts)   # 👈 this builds the vocabulary table
+vectorizer.adapt(texts)   # 👈builds the vocabulary table
 
-# 4. Build the model (vectorizer inside!)
-inputs = keras.Input(shape=(1,), dtype=tf.string)
-x = vectorizer(inputs)
-x = layers.Embedding(input_dim=max_tokens, output_dim=64)(x)
-x = layers.GlobalAveragePooling1D()(x)
-x = layers.Dense(64, activation="relu")(x)
-outputs = layers.Dense(len(label_encoder.classes_), activation="softmax")(x)
-model = keras.Model(inputs, outputs)
+# 4. Build the model
+inputs = keras.Input(shape=(1,), dtype=tf.string) #input layer -> takes string
+x = vectorizer(inputs) #vectorization layer
+x = layers.Embedding(input_dim=max_tokens, output_dim=64)(x) #embedding layer -> converts words to vectors
+x = layers.GlobalAveragePooling1D()(x) 
+x = layers.Dense(64, activation="relu")(x) #dense layer
+outputs = layers.Dense(len(label_encoder.classes_), activation="softmax")(x) #output layer
+model = keras.Model(inputs, outputs) #define the model
 
 model.compile(
     optimizer="adam",
