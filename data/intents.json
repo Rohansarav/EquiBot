@@ -131,16 +131,36 @@
   ]
 },
 {
-  "tag": "meals_transport",
+  "tag": "meals",
   "patterns": [
     "are meals provided",
     "is food included",
     "is food covered",
     "how about meals",
+    "is food provided",
+    "halal food",
+    "can i cook food myself",
+    "do you provide food",
+    "food arrangements",
+    "meal arrangements",
+    "meals details",
+    "food details"
+  ],
+  "responses": [
+    "Meals are provided (mostly non-halal). You are also allowed to buy groceries and use the kitchen at your host’s house.",
+    "Transportation is provided for AIESEC-related project activities. City tours and personal outings are not fully covered, and you will need to bear some of your travel expenses."
+  ]
+},
+{
+  "tag": "transportation",
+  "patterns": [
     "do you provide transport",
     "how about transportation",
     "is transport included",
     "is city tour covered",
+    "transportation details",
+    "transport details",
+    "is transport provided",
     "who pays for daily transport",
     "who pays for transport",
     "do i need to pay for grab",
