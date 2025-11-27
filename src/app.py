@@ -43,6 +43,7 @@ responses = load_intents()
 # ---------- UI THEME ----------
 st.set_page_config(page_title="EquiBot (AIESEC)", page_icon="🤖", layout="centered")
 
+
 CUSTOM_CSS = """
 <style>
 :root {
@@ -66,7 +67,7 @@ CUSTOM_CSS = """
     content: "";
     position: fixed;
     inset: 0;
-    background-image: url("sdg_logo.png");
+    background-image: url("https://www.google.com/imgres?q=sdg%2010%20logo%20png&imgurl=https%3A%2F%2Fsdgs.un.org%2Fsites%2Fdefault%2Ffiles%2Fgoals%2Fimage_logo_clean10008_36.jpg&imgrefurl=https%3A%2F%2Fsdgs.un.org%2Fgoals%2Fgoal10&docid=1C3gu_5p-LAzTM&tbnid=99aUOkEuxbXmdM&vet=12ahUKEwjtlp6m85GRAxXMS2cHHf7nA2gQM3oECCsQAA..i&w=300&h=300&hcb=2&ved=2ahUKEwjtlp6m85GRAxXMS2cHHf7nA2gQM3oECCsQAA");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 45%;
@@ -249,9 +250,21 @@ p, span, label, .stMarkdown {
         opacity: 1;
     }
 }
+/* Add near the bottom of your CSS */
+.sdg10-text {
+    color: var(--accent);
+    font-weight: 600;
+}
+
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+st.markdown(
+    '<p class="sdg10-text">Powered by AI, aligned with SDG 10: Reduced Inequalities.</p>',
+    unsafe_allow_html=True,
+)
+
+
 
 
 # ---------- HELPERS ----------
@@ -288,16 +301,28 @@ if "pending_inference" not in st.session_state:
 if "last_user_text" not in st.session_state:
     st.session_state.last_user_text = ""
 
-# clean out any legacy stray `</div>` messages from older versions
-cleaned = []
-for m in st.session_state.messages:
-    if isinstance(m, dict):
-        txt = str(m.get("text", "")).strip()
-        # drop pure "</div>" or "<div>" leftovers
-        if txt in ("</div>", "<div>", "<div/>"):
-            continue
-        cleaned.append(m)
-st.session_state.messages = cleaned
+# full reset if old corrupted messages detected
+bad = False
+for m in st.session_state.get("messages", []):
+    if isinstance(m, dict) and "</div>" in str(m.get("text", "")):
+        bad = True
+        break
+
+if bad:
+    st.session_state.messages = [greeting_msg]
+else:
+    # your cleanup code
+    cleaned = []
+    for m in st.session_state.messages:
+        if isinstance(m, dict):
+            txt = str(m.get("text", ""))
+            for bad_tag in ("</div>", "<div>", "<div/>"):
+                txt = txt.replace(bad_tag, "")
+            txt = txt.strip()
+            m["text"] = txt
+            if txt:
+                cleaned.append(m)
+    st.session_state.messages = cleaned
 
 # if chat somehow ended up empty, re-add greeting
 if len(st.session_state.messages) == 0:
@@ -320,7 +345,9 @@ if APP_SECRET:
         st.stop()
 
 # ---------- MAIN UI ----------
-st.title("🤖 EquiBot — Equify Project Assistant")
+st.markdown(
+    '<h1>🤖 EquiBot — <span class="sdg10-text">Equify</span> Project Assistant</h1>',
+    unsafe_allow_html=True)
 st.caption("Ask me about Project Equify, logistics, accommodation, and who to contact.")
 st.markdown(
     '<p class="app-caption">Powered by AI, aligned with SDG 10: Reduced Inequalities.</p>',
