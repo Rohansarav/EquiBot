@@ -7,6 +7,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 import streamlit as st
+import re
 
 # ---------- CONFIG ----------
 MODEL_PATH = "models/intent_model.keras"
@@ -123,17 +124,15 @@ p, span, label, .stMarkdown {
     color: var(--muted);
 }
 
-/* Chat container card with gradient background */
+/* Chat container - SIMPLIFIED (no bar/gradient wrapper) */
 .chat-wrapper {
-    background:
-        radial-gradient(circle at top left, rgba(222,13,122,0.35), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(87,100,255,0.28), transparent 55%),
-        rgba(10, 10, 20, 0.9);
-    border-radius: 1.3rem;
-    padding: 1.1rem 1.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
+    padding: 1.1rem 0;
 }
+
+/* OR if you want to keep it minimal with just spacing */
+/* .chat-wrapper {
+    padding: 0;
+} */
 
 /* Chat rows */
 .chat-row {
@@ -281,21 +280,6 @@ def reply_for(tag: str):
 
 
 # ---------- SESSION STATE SETUP & CLEANUP ----------
-greeting_msg = {
-    "role": "assistant",
-    "text": "Hi! I'm EquiBot. How can I help you today?",
-    "meta": "",
-}
-
-# initialise base keys
-if "messages" not in st.session_state:
-    st.session_state.messages = [greeting_msg]
-
-if "pending_inference" not in st.session_state:
-    st.session_state.pending_inference = False
-
-if "last_user_text" not in st.session_state:
-    st.session_state.last_user_text = ""
 
 # Aggressive cleanup for any HTML tags that leaked into messages
 def clean_message_text(text):
@@ -309,26 +293,50 @@ def clean_message_text(text):
     text = text.strip()
     return text
 
+def clean_message_text(text):
+    """Remove any HTML tags from message text"""
+    if not text:
+        return ""
+    text = str(text)
+    text = re.sub(r'<[^>]+>', '', text)  # Remove all HTML tags
+    return text.strip()
+
+# Initialise base keys
+if "messages" not in st.session_state:
+    st.session_state.messages = []  # no greeting inside state
+
+if "pending_inference" not in st.session_state:
+    st.session_state.pending_inference = False
+
+if "last_user_text" not in st.session_state:
+    st.session_state.last_user_text = ""
+
 # Clean all existing messages
 cleaned = []
 for m in st.session_state.get("messages", []):
     if isinstance(m, dict):
         txt = clean_message_text(m.get("text", ""))
         meta = clean_message_text(m.get("meta", ""))
-        if txt:  # Only keep messages with actual text content
+        if txt:
             cleaned.append({
                 "role": m.get("role", "assistant"),
                 "text": txt,
                 "meta": meta,
-                "typing": m.get("typing", False)
+                "typing": m.get("typing", False),
             })
 
-# Reset messages if empty or corrupted
-if not cleaned:
-    st.session_state.messages = [greeting_msg]
-else:
-    st.session_state.messages = cleaned
+st.session_state.messages = cleaned
 
+
+
+# ---------- SIDEBAR: CLEAR CHAT BUTTON ----------
+with st.sidebar:
+    st.subheader("Chat Controls")
+    if st.button("🗑️ Clear Chat History"):
+        st.session_state.messages = []
+        st.session_state.pending_inference = False
+        st.session_state.last_user_text = ""
+        st.rerun()
 
 # ---------- GATE (OPTIONAL) ----------
 if APP_SECRET:
