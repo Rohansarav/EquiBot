@@ -13,7 +13,10 @@ MODEL_PATH = "models/intent_model.keras"
 LABELS_PATH = "models/label_classes.npy"
 INTENTS_PATH = "data/intents.json"
 
-# (Optional) simple “password” gate for limited users
+st.set_page_config(page_title="EquiBot (AIESEC)", page_icon="🤖", layout="centered")
+
+
+# (Optional) simple "password" gate for limited users
 APP_SECRET = os.getenv("EQUIBOT_SECRET", "")  # set this env var on your machine/host
 
 
@@ -41,9 +44,6 @@ label_classes = load_labels()
 responses = load_intents()
 
 # ---------- UI THEME ----------
-st.set_page_config(page_title="EquiBot (AIESEC)", page_icon="🤖", layout="centered")
-
-
 CUSTOM_CSS = """
 <style>
 :root {
@@ -62,12 +62,12 @@ CUSTOM_CSS = """
     color: var(--text);
 }
 
-/* SDG watermark background */
+/* SDG watermark background - FIXED URL */
 [data-testid="stAppViewContainer"]::before {
     content: "";
     position: fixed;
     inset: 0;
-    background-image: url("https://www.google.com/imgres?q=sdg%2010%20logo%20png&imgurl=https%3A%2F%2Fsdgs.un.org%2Fsites%2Fdefault%2Ffiles%2Fgoals%2Fimage_logo_clean10008_36.jpg&imgrefurl=https%3A%2F%2Fsdgs.un.org%2Fgoals%2Fgoal10&docid=1C3gu_5p-LAzTM&tbnid=99aUOkEuxbXmdM&vet=12ahUKEwjtlp6m85GRAxXMS2cHHf7nA2gQM3oECCsQAA..i&w=300&h=300&hcb=2&ved=2ahUKEwjtlp6m85GRAxXMS2cHHf7nA2gQM3oECCsQAA");
+    background-image: url("https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-10.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 45%;
@@ -259,10 +259,6 @@ p, span, label, .stMarkdown {
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-st.markdown(
-    '<p class="sdg10-text">Powered by AI, aligned with SDG 10: Reduced Inequalities.</p>',
-    unsafe_allow_html=True,
-)
 
 
 
@@ -287,7 +283,7 @@ def reply_for(tag: str):
 # ---------- SESSION STATE SETUP & CLEANUP ----------
 greeting_msg = {
     "role": "assistant",
-    "text": "Hi! I’m EquiBot. How can I help you today?",
+    "text": "Hi! I'm EquiBot. How can I help you today?",
     "meta": "",
 }
 
@@ -301,32 +297,37 @@ if "pending_inference" not in st.session_state:
 if "last_user_text" not in st.session_state:
     st.session_state.last_user_text = ""
 
-# full reset if old corrupted messages detected
-bad = False
-for m in st.session_state.get("messages", []):
-    if isinstance(m, dict) and "</div>" in str(m.get("text", "")):
-        bad = True
-        break
+# Aggressive cleanup for any HTML tags that leaked into messages
+def clean_message_text(text):
+    """Remove any HTML tags from message text"""
+    if not text:
+        return ""
+    text = str(text)
+    # Remove all HTML-like content
+    import re
+    text = re.sub(r'<[^>]+>', '', text)  # Remove all HTML tags
+    text = text.strip()
+    return text
 
-if bad:
+# Clean all existing messages
+cleaned = []
+for m in st.session_state.get("messages", []):
+    if isinstance(m, dict):
+        txt = clean_message_text(m.get("text", ""))
+        meta = clean_message_text(m.get("meta", ""))
+        if txt:  # Only keep messages with actual text content
+            cleaned.append({
+                "role": m.get("role", "assistant"),
+                "text": txt,
+                "meta": meta,
+                "typing": m.get("typing", False)
+            })
+
+# Reset messages if empty or corrupted
+if not cleaned:
     st.session_state.messages = [greeting_msg]
 else:
-    # your cleanup code
-    cleaned = []
-    for m in st.session_state.messages:
-        if isinstance(m, dict):
-            txt = str(m.get("text", ""))
-            for bad_tag in ("</div>", "<div>", "<div/>"):
-                txt = txt.replace(bad_tag, "")
-            txt = txt.strip()
-            m["text"] = txt
-            if txt:
-                cleaned.append(m)
     st.session_state.messages = cleaned
-
-# if chat somehow ended up empty, re-add greeting
-if len(st.session_state.messages) == 0:
-    st.session_state.messages.append(greeting_msg)
 
 
 # ---------- GATE (OPTIONAL) ----------
@@ -419,9 +420,11 @@ with st.form("chat_form", clear_on_submit=True):
 
 # When user sends a message: add user + typing bubble, then rerun
 if send and user_msg.strip():
-    st.session_state.last_user_text = user_msg.strip()
+    # Clean the user message before storing
+    clean_user_msg = clean_message_text(user_msg.strip())
+    st.session_state.last_user_text = clean_user_msg
     st.session_state.messages.append(
-        {"role": "user", "text": st.session_state.last_user_text, "meta": ""}
+        {"role": "user", "text": clean_user_msg, "meta": ""}
     )
     st.session_state.messages.append(
         {"role": "assistant", "text": "", "meta": "", "typing": True}
@@ -434,7 +437,7 @@ if st.session_state.pending_inference:
     user_text = st.session_state.last_user_text
 
     tag, conf = predict_intent(user_text)
-    bot_main = reply_for(tag)
+    bot_main = clean_message_text(reply_for(tag))  # Clean bot response
     bot_meta = f"intent: `{tag}` · confidence: {conf:.2f}"
 
     # Find typing message index
