@@ -18,7 +18,7 @@ st.set_page_config(page_title="EquiBot (AIESEC)", page_icon="🤖", layout="cent
 
 
 # (Optional) simple "password" gate for limited users
-APP_SECRET = os.getenv("EQUIBOT_SECRET", "")  # set this env var on your machine/host
+APP_SECRET = os.getenv("EQUIBOT_SECRET", "") # set this env var to enable
 
 
 # ---------- LOAD ASSETS ----------
@@ -168,7 +168,7 @@ p, span, label, .stMarkdown {
     content: "🤖";
 }
 .chat-row.user::after {
-    content: "🙂";
+    content: "👤";
 }
 
 /* Chat bubbles */
@@ -203,12 +203,6 @@ p, span, label, .stMarkdown {
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Small intent/confidence text */
-.bot-meta {
-    margin-top: 0.25rem;
-    font-size: 0.78rem;
-    color: var(--muted);
-}
 
 /* Caption under title */
 .app-caption {
@@ -279,20 +273,8 @@ def reply_for(tag: str):
     return random.choice(options)
 
 
+
 # ---------- SESSION STATE SETUP & CLEANUP ----------
-
-# Aggressive cleanup for any HTML tags that leaked into messages
-def clean_message_text(text):
-    """Remove any HTML tags from message text"""
-    if not text:
-        return ""
-    text = str(text)
-    # Remove all HTML-like content
-    import re
-    text = re.sub(r'<[^>]+>', '', text)  # Remove all HTML tags
-    text = text.strip()
-    return text
-
 def clean_message_text(text):
     """Remove any HTML tags from message text"""
     if not text:
@@ -314,16 +296,23 @@ if "last_user_text" not in st.session_state:
 # Clean all existing messages
 cleaned = []
 for m in st.session_state.get("messages", []):
-    if isinstance(m, dict):
-        txt = clean_message_text(m.get("text", ""))
-        meta = clean_message_text(m.get("meta", ""))
-        if txt:
-            cleaned.append({
-                "role": m.get("role", "assistant"),
-                "text": txt,
-                "meta": meta,
-                "typing": m.get("typing", False),
-            })
+    if not isinstance(m, dict):
+        continue
+
+    is_typing = bool(m.get("typing", False))
+    txt = clean_message_text(m.get("text", ""))
+    meta = clean_message_text(m.get("meta", ""))
+
+    # Keep if there is text OR it's a typing placeholder
+    if not txt and not is_typing:
+        continue
+
+    cleaned.append({
+        "role": m.get("role", "assistant"),
+        "text": txt,
+        "meta": meta,
+        "typing": is_typing,
+    })
 
 st.session_state.messages = cleaned
 
@@ -404,22 +393,19 @@ with chat_container:
             )
         else:  # assistant normal message
             text = m.get("text", "")
-            meta = m.get("meta", "")
             safe_text = escape(text)
-            safe_meta = escape(meta)
 
             st.markdown(
                 f"""
                 <div class="chat-row bot">
                     <div class="chat-bubble bot-bubble">
                         {safe_text}
-                        {"<div class='bot-meta'>" + safe_meta + "</div>" if meta else ""}
                     </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------- INPUT BOX ----------
 with st.form("chat_form", clear_on_submit=True):
@@ -446,7 +432,6 @@ if st.session_state.pending_inference:
 
     tag, conf = predict_intent(user_text)
     bot_main = clean_message_text(reply_for(tag))  # Clean bot response
-    bot_meta = f"intent: `{tag}` · confidence: {conf:.2f}"
 
     # Find typing message index
     typing_index = None
@@ -459,7 +444,6 @@ if st.session_state.pending_inference:
         st.session_state.messages[typing_index] = {
             "role": "assistant",
             "text": bot_main,
-            "meta": bot_meta,
         }
 
     st.session_state.pending_inference = False

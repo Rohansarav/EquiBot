@@ -33,7 +33,7 @@ vectorizer = layers.TextVectorization(
     output_mode="int",
     output_sequence_length=seq_len,
 )
-vectorizer.adapt(texts)   # 👈builds the vocabulary table
+vectorizer.adapt(texts)   # builds the vocabulary table
 
 # 4. Build the model
 inputs = keras.Input(shape=(1,), dtype=tf.string) #input layer -> takes string
